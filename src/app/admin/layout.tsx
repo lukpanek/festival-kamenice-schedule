@@ -1,7 +1,15 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { LogOut, Users, Music2, CalendarDays, Mic2, Layers } from "lucide-react";
+import {
+  LogOut,
+  Users,
+  Music2,
+  CalendarDays,
+  Mic2,
+  Layers,
+  Images,
+} from "lucide-react";
 import {
   SidebarProvider,
   Sidebar,
@@ -24,12 +32,16 @@ export default async function AdminLayout({
 }) {
   const session = await auth();
 
-  if (session?.user?.role !== "admin") {
+  if (!session) {
+    redirect("/login?callbackUrl=%2Fadmin");
+  }
+  if (session.user.role !== "admin") {
     redirect("/");
   }
 
   const menuItems = [
     { name: "Umělci", href: "/admin/artists", icon: Mic2 },
+    { name: "Média", href: "/admin/media", icon: Images },
     { name: "Program", href: "/admin/performances", icon: CalendarDays },
     { name: "Stages", href: "/admin/stages", icon: Layers },
     { name: "Kategorie", href: "/admin/categories", icon: Music2 },
@@ -39,19 +51,16 @@ export default async function AdminLayout({
   return (
     <SidebarProvider>
       <Sidebar>
-        <SidebarHeader className="p-4 border-b">
+        <SidebarHeader className="border-b h-12 p-4">
           <Link
             href="/admin"
-            className="font-heading text-lg uppercase tracking-tight leading-none"
+            className="font-heading text-4xl h-6 -mt-2 uppercase leading-none"
           >
             KAMEN!CE Admin
           </Link>
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel className="uppercase tracking-widest text-[10px]">
-              Data Festivalu
-            </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {menuItems.map((item) => (
@@ -76,13 +85,13 @@ export default async function AdminLayout({
               await signOut();
             }}
           >
-            <button className="w-full text-left text-xs font-medium text-muted-foreground hover:text-foreground flex items-center gap-2 transition-colors">
+            <button className="w-full text-left text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-2 transition-colors">
               <LogOut className="w-3.5 h-3.5" /> Odhlásit
             </button>
           </form>
           <Link
             href="/"
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground text-sm hover:text-foreground transition-colors"
           >
             &larr; Zpět na web
           </Link>

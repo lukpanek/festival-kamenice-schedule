@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { artists } from "@/db/schema";
+import { resolveArtistImageFromForm } from "@/lib/artist-uploads";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -27,7 +28,19 @@ export default async function ArtistFormPage(
     const genre = formData.get("genre") as string;
     const shortDescription = formData.get("shortDescription") as string;
     const longDescription = formData.get("longDescription") as string;
-    const imageUrl = formData.get("imageUrl") as string;
+
+    let previousImageUrl: string | null = null;
+    if (!isNew) {
+      const row = await db.query.artists.findFirst({
+        where: eq(artists.id, params.id),
+        columns: { imageUrl: true },
+      });
+      previousImageUrl = row?.imageUrl ?? null;
+    }
+    const { imageUrl } = await resolveArtistImageFromForm(
+      formData,
+      isNew ? { mode: "create" } : { mode: "update", previousImageUrl }
+    );
     const youtubeUrl = formData.get("youtubeUrl") as string;
     const spotifyUrl = formData.get("spotifyUrl") as string;
     const instagramUrl = formData.get("instagramUrl") as string;
@@ -45,6 +58,9 @@ export default async function ArtistFormPage(
     }
 
     revalidatePath("/admin/artists");
+    revalidatePath("/admin/media");
+    revalidatePath("/");
+    revalidatePath("/my-schedule");
     redirect("/admin/artists");
   }
 

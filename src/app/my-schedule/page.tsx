@@ -17,7 +17,9 @@ export default async function MySchedulePage(props: {
 }) {
   const searchParams = await props.searchParams;
   const session = await auth();
-  if (!session?.user?.id) redirect("/");
+  if (!session?.user?.id) {
+    redirect("/login?callbackUrl=%2Fmy-schedule");
+  }
 
   const usInfo = await db
     .select()

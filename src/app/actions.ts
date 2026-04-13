@@ -5,11 +5,6 @@ import { db } from "@/db";
 import { userSchedule } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 
-export async function signInAction() {
-  const { signIn } = await import("@/auth");
-  await signIn();
-}
-
 export async function signOutAction() {
   const { signOut } = await import("@/auth");
   await signOut();

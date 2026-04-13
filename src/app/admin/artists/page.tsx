@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { artists } from "@/db/schema";
+import { deleteArtistAdmin } from "@/app/admin/artists/actions";
 import { asc, ilike, or } from "drizzle-orm";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -115,19 +116,8 @@ export default async function AdminArtistsPage(
                           <Edit2 className="w-3.5 h-3.5" />
                         </Button>
                       </Link>
-                      <form
-                        action={async () => {
-                          "use server";
-                          const { eq } = await import("drizzle-orm");
-                          const { revalidatePath } = await import(
-                            "next/cache"
-                          );
-                          await db
-                            .delete(artists)
-                            .where(eq(artists.id, artist.id));
-                          revalidatePath("/admin/artists");
-                        }}
-                      >
+                      <form action={deleteArtistAdmin}>
+                        <input type="hidden" name="artistId" value={artist.id} />
                         <Button
                           variant="ghost"
                           size="icon"

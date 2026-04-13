@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import Link from "next/link";
 import { LogIn, LogOut, Heart, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { signInAction, signOutAction } from "@/app/actions";
+import { signOutAction } from "@/app/actions";
 
 interface AppNavProps {
   showBackLink?: boolean;
@@ -26,7 +26,7 @@ export async function AppNav({ showBackLink = false }: AppNavProps) {
           )}
           <Link
             href="/"
-            className="font-heading text-5xl uppercase leading-none shrink-0"
+            className="font-heading text-5xl uppercase h-11 leading-none shrink-0"
           >
             KAMEN!CE
           </Link>
@@ -70,12 +70,12 @@ export async function AppNav({ showBackLink = false }: AppNavProps) {
               </form>
             </>
           ) : (
-            <form action={signInAction}>
-              <Button size="sm" className="gap-1.5 touch-manipulation">
+            <Button size="sm" className="gap-1.5 touch-manipulation" asChild>
+              <Link href="/login">
                 <LogIn className="w-4 h-4" />
                 <span className="hidden sm:inline">Přihlásit se</span>
-              </Button>
-            </form>
+              </Link>
+            </Button>
           )}
         </div>
       </div>

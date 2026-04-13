@@ -48,7 +48,7 @@ export default async function HomePage(
         <div className="border-b">
           <div className="container py-5">
             <h1 className="font-heading text-4xl sm:text-5xl uppercase mb-4 leading-none">
-              Lineup 2026
+              Hlavní harmonogram
             </h1>
             <DaySelector days={FESTIVAL_DAYS} selectedDay={selectedDay} basePath="/" />
           </div>

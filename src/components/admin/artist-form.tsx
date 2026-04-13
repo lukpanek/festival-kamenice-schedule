@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ArtistImageField } from "@/components/admin/artist-image-field";
 
 const ArtistDescriptionEditor = dynamic(
   () =>
@@ -82,14 +83,8 @@ export function ArtistForm({
         />
       </div>
 
-      <div className="flex flex-col gap-2 pt-4 border-t">
-        <Label htmlFor="imageUrl">Odkaz na fotku (URL)</Label>
-        <Input
-          id="imageUrl"
-          name="imageUrl"
-          defaultValue={initialData?.imageUrl || ""}
-          placeholder="https://..."
-        />
+      <div className="pt-4 border-t">
+        <ArtistImageField initialImageUrl={initialData?.imageUrl} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t">
