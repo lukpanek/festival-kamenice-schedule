@@ -51,7 +51,7 @@ export default async function LoginPage(props: {
           >
             KAMEN!CE
           </Link>
-          <Button variant="ghost" size="sm" asChild className="touch-manipulation">
+          <Button variant="ghost" asChild className="touch-manipulation">
             <Link href="/" className="gap-1.5">
               <ArrowLeft className="w-4 h-4" />
               <span className="hidden sm:inline">Na program</span>

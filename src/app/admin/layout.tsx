@@ -1,29 +1,17 @@
 import { auth } from "@/auth";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import {
-  LogOut,
-  Users,
-  Music2,
-  CalendarDays,
-  Mic2,
-  Layers,
-  Images,
-} from "lucide-react";
+import { LogOut } from "lucide-react";
 import {
   SidebarProvider,
   Sidebar,
   SidebarContent,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
   SidebarHeader,
   SidebarFooter,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { AdminSidebarNav } from "@/components/admin/admin-sidebar-nav";
 
 export default async function AdminLayout({
   children,
@@ -31,6 +19,8 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
+  const cookieStore = await cookies();
+  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
   if (!session) {
     redirect("/login?callbackUrl=%2Fadmin");
@@ -39,17 +29,8 @@ export default async function AdminLayout({
     redirect("/");
   }
 
-  const menuItems = [
-    { name: "Umělci", href: "/admin/artists", icon: Mic2 },
-    { name: "Média", href: "/admin/media", icon: Images },
-    { name: "Program", href: "/admin/performances", icon: CalendarDays },
-    { name: "Stages", href: "/admin/stages", icon: Layers },
-    { name: "Kategorie", href: "/admin/categories", icon: Music2 },
-    { name: "Uživatelé", href: "/admin/users", icon: Users },
-  ];
-
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={defaultOpen}>
       <Sidebar>
         <SidebarHeader className="border-b h-12 p-4">
           <Link
@@ -60,22 +41,7 @@ export default async function AdminLayout({
           </Link>
         </SidebarHeader>
         <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {menuItems.map((item) => (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild>
-                      <Link href={item.href}>
-                        <item.icon />
-                        <span>{item.name}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+          <AdminSidebarNav />
         </SidebarContent>
         <SidebarFooter className="border-t p-4 flex flex-col gap-3">
           <form

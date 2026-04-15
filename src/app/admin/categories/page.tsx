@@ -3,6 +3,7 @@ import { artistCategories } from "@/db/schema";
 import { asc, ilike } from "drizzle-orm";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ConfirmSubmitButton } from "@/components/admin/confirm-submit-button";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -29,7 +30,7 @@ export default async function AdminCategoriesPage(
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl uppercase tracking-tight">
+          <h1 className="md:text-5xl text-4xl uppercase">
             Kategorie
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -47,7 +48,7 @@ export default async function AdminCategoriesPage(
             />
           </form>
           <Link href="/admin/categories/new">
-            <Button size="sm" className="gap-1.5 shrink-0">
+            <Button className="gap-1.5 shrink-0">
               <Plus className="w-4 h-4" />
               <span className="hidden sm:inline">Přidat</span>
             </Button>
@@ -103,13 +104,14 @@ export default async function AdminCategoriesPage(
                           revalidatePath("/admin/categories");
                         }}
                       >
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        <ConfirmSubmitButton
+                          ariaLabel="Smazat kategorii"
+                          title={`Smazat kategorii „${category.name}“?`}
+                          description="Kategorie se odstraní z administrace. U existujících vystoupení se její přiřazení zruší, ale samotný program zůstane zachovaný."
+                          triggerClassName="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
-                        </Button>
+                        </ConfirmSubmitButton>
                       </form>
                     </div>
                   </TableCell>

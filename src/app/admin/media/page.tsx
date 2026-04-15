@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { listArtistUploadsWithUsage } from "@/lib/artist-uploads";
 import { deleteOrphanArtistUploadAction } from "@/app/admin/media/actions";
-import { Button } from "@/components/ui/button";
+import { ConfirmSubmitButton } from "@/components/admin/confirm-submit-button";
 import {
   Table,
   TableBody,
@@ -24,7 +24,7 @@ export default async function AdminMediaPage() {
   return (
     <div className="flex flex-col gap-6 max-w-5xl">
       <div>
-        <h1 className="text-2xl sm:text-3xl uppercase tracking-tight">
+        <h1 className="md:text-5xl text-4xl uppercase">
           Média — fotky umělců
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
@@ -99,15 +99,14 @@ export default async function AdminMediaPage() {
                           name="publicPath"
                           value={item.publicPath}
                         />
-                        <Button
-                          type="submit"
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                          aria-label="Smazat soubor"
+                        <ConfirmSubmitButton
+                          ariaLabel="Smazat soubor"
+                          title={`Smazat soubor „${item.filename}“?`}
+                          description="Soubor se trvale smaže z /uploads/artists. Tato akce je dostupná jen u nepřiřazených obrázků, takže se tím neodpojí žádný umělec."
+                          triggerClassName="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
-                        </Button>
+                        </ConfirmSubmitButton>
                       </form>
                     ) : (
                       <span className="text-xs text-muted-foreground">—</span>

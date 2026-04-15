@@ -146,4 +146,9 @@
     font-family: var(--font-heading);
     font-weight: 500;
   }
+
+  .font-body {
+    font-weight: 400;
+    font-family: var(--font-sans);
+  }
 }

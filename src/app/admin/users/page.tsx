@@ -30,7 +30,7 @@ export default async function AdminUsersPage(
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl uppercase tracking-tight">
+          <h1 className="md:text-5xl text-4xl uppercase">
             Uživatelé
           </h1>
           <p className="text-sm text-muted-foreground mt-1">

@@ -159,7 +159,6 @@ export function ArtistDialog({
                 <form action={toggleScheduleAction}>
                   <Button
                     variant={isAdded ? "default" : "outline"}
-                    size="sm"
                     className="gap-2 touch-manipulation"
                   >
                     <Heart

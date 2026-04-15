@@ -49,7 +49,7 @@ export default async function AdminStageEditorPage(
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <h1 className="text-2xl sm:text-3xl uppercase tracking-tight">
+        <h1 className="md:text-5xl text-4xl uppercase">
           {isNew ? "Nové pódium" : "Upravit pódium"}
         </h1>
       </div>

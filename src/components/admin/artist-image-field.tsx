@@ -61,7 +61,7 @@ export function ArtistImageField({
 
         <div className="flex flex-col gap-3 min-w-0 flex-1">
           <div className="flex flex-wrap gap-2">
-            <Button type="button" variant="outline" size="sm" asChild>
+            <Button type="button" variant="outline" asChild>
               <label htmlFor={inputId} className="cursor-pointer">
                 Vybrat soubor
               </label>

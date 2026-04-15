@@ -3,6 +3,7 @@ import { stages } from "@/db/schema";
 import { asc, ilike } from "drizzle-orm";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ConfirmSubmitButton } from "@/components/admin/confirm-submit-button";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -29,7 +30,7 @@ export default async function AdminStagesPage(props: {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
         <div>
-          <h1 className="text-5xl uppercase">Stages</h1>
+          <h1 className="md:text-5xl text-4xl uppercase">Stages</h1>
           <p className="text-sm text-muted-foreground mt-1">
             Pódia a lokace programu.
           </p>
@@ -45,7 +46,7 @@ export default async function AdminStagesPage(props: {
             />
           </form>
           <Link href="/admin/stages/new">
-            <Button size="sm" className="gap-1.5 shrink-0">
+            <Button className="gap-1.5 shrink-0">
               <Plus className="w-4 h-4" />
               <span className="hidden sm:inline">Přidat</span>
             </Button>
@@ -103,13 +104,14 @@ export default async function AdminStagesPage(props: {
                           revalidatePath("/admin/stages");
                         }}
                       >
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        <ConfirmSubmitButton
+                          ariaLabel="Smazat stage"
+                          title={`Smazat stage „${stage.name}“?`}
+                          description="Stage se odstraní z administrace a spolu s ní se smažou i všechna vystoupení v programu, která jsou na ni navázaná."
+                          triggerClassName="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
-                        </Button>
+                        </ConfirmSubmitButton>
                       </form>
                     </div>
                   </TableCell>
