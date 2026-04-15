@@ -89,7 +89,7 @@ export function ArtistDialog({
             <div className="flex items-center gap-3 mb-3 flex-wrap">
               {(artist.genre || category?.name) && (
                 <span
-                  className="text-[11px] font-bold uppercase px-2 py-0.5 border tracking-wider"
+                  className="text-xs font-bold uppercase px-2 py-0.5 border tracking-wider"
                   style={
                     category?.color
                       ? { borderColor: category.color, color: category.color }

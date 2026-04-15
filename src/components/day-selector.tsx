@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface Day {
   readonly label: string;
@@ -20,18 +20,13 @@ export function DaySelector({
   return (
     <div className="flex gap-1.5">
       {days.map((day) => (
-        <Link
+        <Button
           key={day.date}
-          href={`${basePath}?day=${day.date}`}
-          className={cn(
-            "px-3 py-1.5 text-sm font-medium transition-colors touch-manipulation border",
-            selectedDay === day.date
-              ? "bg-foreground text-background border-foreground"
-              : "bg-transparent text-muted-foreground border-border hover:text-foreground hover:border-foreground"
-          )}
+          asChild
+          variant={selectedDay === day.date ? "default" : "outline"}
         >
-          {day.label}
-        </Link>
+          <Link href={`${basePath}?day=${day.date}`}>{day.label}</Link>
+        </Button>
       ))}
     </div>
   );

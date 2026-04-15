@@ -1,9 +1,15 @@
 import { auth } from "@/auth";
 import { db } from "@/db";
-import { performances, stages, artists, artistCategories, userSchedule } from "@/db/schema";
+import {
+  performances,
+  stages,
+  artists,
+  artistCategories,
+  userSchedule,
+} from "@/db/schema";
 import { asc, eq, inArray } from "drizzle-orm";
 import Link from "next/link";
-import { ArrowLeft, Clock } from "lucide-react";
+import { ArrowLeft, Clock, Heart, HeartCrack } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AppNav } from "@/components/app-nav";
@@ -32,18 +38,18 @@ export default async function MySchedulePage(props: {
       <div className="flex flex-col min-h-screen">
         <AppNav showBackLink />
         <div className="flex-1 flex flex-col items-center justify-center px-4 py-16 text-center max-w-sm mx-auto">
-          <Clock className="w-10 h-10 text-muted-foreground mb-5 opacity-40" />
-          <h1 className="font-heading text-3xl uppercase mb-3 leading-tight">
-            Harmonogram je prázdný
+          <HeartCrack className="size-16 text-primary mb-5" />
+          <h1 className="font-heading text-5xl uppercase mb-3 leading-tight">
+            Tvůj plán je prázdný
           </h1>
-          <p className="text-muted-foreground text-sm mb-7 leading-relaxed">
+          <p className="text-muted-foreground text-base mb-7">
             Zatím sis nic do plánu neuložil. Vrať se na lineup a naklikej svůj
             best program!
           </p>
           <Link href="/">
-            <Button size="sm" className="touch-manipulation">
+            <Button>
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Zpět na Lineup
+              Zpět na line-up
             </Button>
           </Link>
         </div>
@@ -61,7 +67,10 @@ export default async function MySchedulePage(props: {
     .from(performances)
     .leftJoin(artists, eq(performances.artistId, artists.id))
     .leftJoin(stages, eq(performances.stageId, stages.id))
-    .leftJoin(artistCategories, eq(performances.categoryId, artistCategories.id))
+    .leftJoin(
+      artistCategories,
+      eq(performances.categoryId, artistCategories.id),
+    )
     .where(inArray(performances.id, performanceIds))
     .orderBy(asc(performances.date), asc(performances.startTime));
 

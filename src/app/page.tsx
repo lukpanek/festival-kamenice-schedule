@@ -1,6 +1,12 @@
 import { auth } from "@/auth";
 import { db } from "@/db";
-import { performances, stages, artists, artistCategories, userSchedule } from "@/db/schema";
+import {
+  performances,
+  stages,
+  artists,
+  artistCategories,
+  userSchedule,
+} from "@/db/schema";
 import { eq, asc } from "drizzle-orm";
 import { AppNav } from "@/components/app-nav";
 import { DaySelector } from "@/components/day-selector";
@@ -8,14 +14,16 @@ import { ScheduleViews } from "@/components/schedule-views";
 import { FESTIVAL_DAYS } from "@/lib/config";
 import { toggleScheduleAction } from "@/app/actions";
 
-export default async function HomePage(
-  props: { searchParams: Promise<{ day?: string; showArtist?: string }> }
-) {
+export default async function HomePage(props: {
+  searchParams: Promise<{ day?: string; showArtist?: string }>;
+}) {
   const searchParams = await props.searchParams;
   const session = await auth();
   const selectedDay = searchParams.day || FESTIVAL_DAYS[0].date;
 
-  const allStages = await db.query.stages.findMany({ orderBy: [asc(stages.order)] });
+  const allStages = await db.query.stages.findMany({
+    orderBy: [asc(stages.order)],
+  });
 
   const todaysPerformances = await db
     .select({
@@ -27,7 +35,10 @@ export default async function HomePage(
     .from(performances)
     .leftJoin(artists, eq(performances.artistId, artists.id))
     .leftJoin(stages, eq(performances.stageId, stages.id))
-    .leftJoin(artistCategories, eq(performances.categoryId, artistCategories.id))
+    .leftJoin(
+      artistCategories,
+      eq(performances.categoryId, artistCategories.id),
+    )
     .where(eq(performances.date, selectedDay))
     .orderBy(asc(performances.startTime));
 
@@ -46,11 +57,15 @@ export default async function HomePage(
 
       <main className="flex-1 flex flex-col w-full overflow-hidden">
         <div className="border-b">
-          <div className="container py-5">
-            <h1 className="font-heading text-4xl sm:text-5xl uppercase mb-4 leading-none">
-              Hlavní harmonogram
+          <div className="container pb-5 pt-10">
+            <h1 className="font-heading text-4xl sm:text-6xl uppercase mb-4 leading-none">
+              Celý line-up
             </h1>
-            <DaySelector days={FESTIVAL_DAYS} selectedDay={selectedDay} basePath="/" />
+            <DaySelector
+              days={FESTIVAL_DAYS}
+              selectedDay={selectedDay}
+              basePath="/"
+            />
           </div>
         </div>
 

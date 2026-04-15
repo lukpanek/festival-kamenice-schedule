@@ -14,9 +14,9 @@ import {
 } from "@/components/ui/table";
 import { Plus, Edit2, Trash2, Search } from "lucide-react";
 
-export default async function AdminStagesPage(
-  props: { searchParams: Promise<{ q?: string }> }
-) {
+export default async function AdminStagesPage(props: {
+  searchParams: Promise<{ q?: string }>;
+}) {
   const searchParams = await props.searchParams;
   const q = searchParams.q || "";
 
@@ -29,9 +29,7 @@ export default async function AdminStagesPage(
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl uppercase tracking-tight">
-            Stages
-          </h1>
+          <h1 className="text-5xl uppercase">Stages</h1>
           <p className="text-sm text-muted-foreground mt-1">
             Pódia a lokace programu.
           </p>
@@ -98,9 +96,7 @@ export default async function AdminStagesPage(
                         action={async () => {
                           "use server";
                           const { eq } = await import("drizzle-orm");
-                          const { revalidatePath } = await import(
-                            "next/cache"
-                          );
+                          const { revalidatePath } = await import("next/cache");
                           await db
                             .delete(stages)
                             .where(eq(stages.id, stage.id));

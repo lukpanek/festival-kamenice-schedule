@@ -121,7 +121,7 @@ export default async function AdminPerformancesPage(
                     <TableCell className="hidden md:table-cell">
                       {category?.name ? (
                         <span
-                          className="inline-flex items-center text-[10px] font-semibold uppercase px-2 py-0.5 border"
+                          className="inline-flex items-center text-xs font-semibold uppercase px-2 py-0.5 border"
                           style={{
                             borderColor: category.color || "var(--border)",
                           }}

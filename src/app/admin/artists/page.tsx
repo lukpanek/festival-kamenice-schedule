@@ -83,7 +83,7 @@ export default async function AdminArtistsPage(
                           className="object-cover w-full h-full"
                         />
                       ) : (
-                        <span className="text-[8px] text-muted-foreground uppercase font-bold">
+                        <span className="text-xs text-muted-foreground uppercase font-bold">
                           —
                         </span>
                       )}

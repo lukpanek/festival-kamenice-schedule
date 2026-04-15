@@ -77,7 +77,7 @@ export default async function AdminUsersPage(
                   <TableCell>
                     <Badge
                       variant={user.role === "admin" ? "default" : "secondary"}
-                      className="uppercase text-[10px]"
+                      className="uppercase text-xs"
                     >
                       {user.role}
                     </Badge>
