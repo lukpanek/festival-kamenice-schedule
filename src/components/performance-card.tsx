@@ -7,7 +7,6 @@ interface PerformanceCardProps {
   startTime: string;
   endTime: string;
   artistName: string | undefined;
-  categoryColor: string | undefined;
   startPx: number;
   widthPx: number;
   isAdded: boolean;
@@ -19,7 +18,6 @@ export function PerformanceCard({
   startTime,
   endTime,
   artistName,
-  categoryColor,
   startPx,
   widthPx,
   isAdded,
@@ -33,21 +31,20 @@ export function PerformanceCard({
         left: startPx,
         width: widthPx,
         minWidth: widthPx,
-        /* borderLeft: `3px solid ${categoryColor ?? "var(--primary)"}`, */
       }}
     >
       <div className="flex justify-between gap-2 items-center">
         <span className="font-mono text-sm text-black/75 dark:text-white/75 leading-none">
           {startTime.slice(0, 5)}–{endTime.slice(0, 5)}
         </span>
-        {isAdded && (
-          <Heart className="size-3 text-primary fill-primary shrink-0 mb-0.5" />
-        )}
       </div>
       <div className="flex items-end justify-between gap-1">
         <p className="leading-none font-bold text-md truncate">
           {artistName ?? ""}
         </p>
+        {isAdded && (
+          <Heart className="size-4 text-red-500 fill-red-500 shrink-0 mb-0.5" />
+        )}
       </div>
     </Link>
   );

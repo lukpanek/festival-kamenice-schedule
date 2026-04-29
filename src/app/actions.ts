@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { db } from "@/db";
 import { userSchedule } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export async function signOutAction() {
   const { signOut } = await import("@/auth");
@@ -28,4 +29,7 @@ export async function toggleScheduleAction(perfId: string) {
   } else {
     await db.insert(userSchedule).values({ userId, performanceId: perfId });
   }
+
+  revalidatePath("/");
+  revalidatePath("/my-schedule");
 }

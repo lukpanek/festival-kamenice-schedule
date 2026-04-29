@@ -7,19 +7,55 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useRouter, usePathname } from "next/navigation";
-import { Heart, Music, Play, Camera, X } from "lucide-react";
+import { Heart, X } from "lucide-react";
+import {
+  SiSpotify,
+  SiYoutube,
+  SiInstagram,
+} from "@icons-pack/react-simple-icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { sanitizeArtistDescriptionHtml } from "@/lib/sanitize-artist-html";
+import { useFormStatus } from "react-dom";
 
-export function ArtistDialog({
+function AddToScheduleButton({ isAdded }: { isAdded: boolean }) {
+  const { pending } = useFormStatus();
+  const effectivelyAdded = pending ? !isAdded : isAdded;
+
+  return (
+    <Button
+      variant={effectivelyAdded ? "default" : "outline"}
+      className="gap-2 touch-manipulation"
+      disabled={pending}
+      type="submit"
+    >
+      <Heart className={cn("w-4 h-4", effectivelyAdded && "fill-current")} />
+      {effectivelyAdded ? "V tvém plánu" : "Přidat do plánu"}
+    </Button>
+  );
+}
+
+import { type InferSelectModel } from "drizzle-orm";
+import { artists, artistCategories, performances } from "@/db/schema";
+
+type Artist = InferSelectModel<typeof artists>;
+type Category = InferSelectModel<typeof artistCategories>;
+type Performance = InferSelectModel<typeof performances>;
+
+interface SelectedArtistDetails {
+  artist: Artist;
+  category?: Category | null;
+  performance: Performance;
+}
+
+export function PerformanceDialog({
   selectedArtistDetails,
   selectedDay,
   userId,
   isAdded,
   toggleScheduleAction,
 }: {
-  selectedArtistDetails: any;
+  selectedArtistDetails: SelectedArtistDetails;
   selectedDay: string;
   userId?: string;
   isAdded: boolean;
@@ -49,7 +85,7 @@ export function ArtistDialog({
           "p-0 gap-0 overflow-hidden",
           "w-full max-w-full h-full max-h-full rounded-none",
           "sm:max-w-xl sm:h-auto sm:max-h-[90vh] sm:rounded-none",
-          "flex flex-col"
+          "flex flex-col",
         )}
       >
         <DialogTitle className="sr-only">{artist.name}</DialogTitle>
@@ -88,14 +124,7 @@ export function ArtistDialog({
           <div className="p-5 sm:p-6">
             <div className="flex items-center gap-3 mb-3 flex-wrap">
               {(artist.genre || category?.name) && (
-                <span
-                  className="text-xs font-bold uppercase px-2 py-0.5 border tracking-wider"
-                  style={
-                    category?.color
-                      ? { borderColor: category.color, color: category.color }
-                      : undefined
-                  }
-                >
+                <span className="text-xs font-bold uppercase px-2 py-0.5 border tracking-wider">
                   {artist.genre || category?.name}
                 </span>
               )}
@@ -105,8 +134,13 @@ export function ArtistDialog({
               </span>
             </div>
 
-            <p className="text-3xl sm:text-4xl uppercase leading-none mb-5 font-heading">
-              {artist.name}
+            <p className="text-4xl sm:text-5xl uppercase leading-none mb-5 font-heading flex justify-between">
+              <span>{artist.name}</span>
+              <span>
+                {performance.date.split("-").length === 3
+                  ? `${parseInt(performance.date.split("-")[2], 10)}/${parseInt(performance.date.split("-")[1], 10)}`
+                  : performance.date}
+              </span>
             </p>
 
             {artist.longDescription && (
@@ -128,7 +162,7 @@ export function ArtistDialog({
                     className="text-muted-foreground hover:text-foreground transition-colors touch-manipulation"
                     aria-label="Spotify"
                   >
-                    <Music className="w-5 h-5" />
+                    <SiSpotify className="w-5 h-5" />
                   </a>
                 )}
                 {artist.youtubeUrl && (
@@ -139,7 +173,7 @@ export function ArtistDialog({
                     className="text-muted-foreground hover:text-foreground transition-colors touch-manipulation"
                     aria-label="YouTube"
                   >
-                    <Play className="w-5 h-5" />
+                    <SiYoutube className="w-5 h-5" />
                   </a>
                 )}
                 {artist.instagramUrl && (
@@ -150,22 +184,14 @@ export function ArtistDialog({
                     className="text-muted-foreground hover:text-foreground transition-colors touch-manipulation"
                     aria-label="Instagram"
                   >
-                    <Camera className="w-5 h-5" />
+                    <SiInstagram className="w-5 h-5" />
                   </a>
                 )}
               </div>
 
               {userId && (
                 <form action={toggleScheduleAction}>
-                  <Button
-                    variant={isAdded ? "default" : "outline"}
-                    className="gap-2 touch-manipulation"
-                  >
-                    <Heart
-                      className={cn("w-4 h-4", isAdded && "fill-current")}
-                    />
-                    {isAdded ? "V harmonogramu" : "Přidat do plánu"}
-                  </Button>
+                  <AddToScheduleButton isAdded={isAdded} />
                 </form>
               )}
             </div>

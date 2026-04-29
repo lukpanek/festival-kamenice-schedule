@@ -18,7 +18,23 @@ export async function GET() {
     .orderBy(asc(performances.date), asc(performances.startTime));
 
     // Formátování do čistého strukturovaného JSON grafu pro externí integrace
-    const groupedByDay = data.reduce((acc, curr) => {
+    const groupedByDay = data.reduce<Record<string, {
+      date: string;
+      stages: Record<string, {
+        id: string;
+        startTime: string;
+        endTime: string;
+        artist: {
+          id: string;
+          name: string;
+          genre: string | null;
+          imageUrl: string | null;
+        } | null;
+        category: {
+          name: string;
+        } | null;
+      }[]>;
+    }>>((acc, curr) => {
       const date = curr.performance.date;
       if (!acc[date]) {
          acc[date] = { date, stages: {} };
@@ -41,15 +57,14 @@ export async function GET() {
          } : null,
          category: curr.category ? {
             name: curr.category.name,
-            color: curr.category.color,
          } : null
       });
 
       return acc;
-    }, {} as Record<string, any>);
+    }, {});
 
     return NextResponse.json(Object.values(groupedByDay));
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch schedule" }, { status: 500 });
   }
 }

@@ -24,14 +24,13 @@ export default async function AdminCategoryEditorPage(
   async function saveCategory(formData: FormData) {
     "use server";
     const name = formData.get("name") as string;
-    const color = formData.get("color") as string;
 
     if (isNew) {
-      await db.insert(artistCategories).values({ name, color });
+      await db.insert(artistCategories).values({ name });
     } else {
       await db
         .update(artistCategories)
-        .set({ name, color })
+        .set({ name })
         .where(eq(artistCategories.id, params.id));
     }
 
@@ -55,7 +54,6 @@ export default async function AdminCategoryEditorPage(
 
       <CategoryForm
         initialData={category}
-        categoryId={params.id}
         saveAction={saveCategory}
       />
     </div>

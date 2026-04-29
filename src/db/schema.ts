@@ -4,8 +4,6 @@ import {
   text,
   primaryKey,
   integer,
-  serial,
-  boolean,
   time,
   date,
 } from "drizzle-orm/pg-core";
@@ -21,6 +19,7 @@ export const users = pgTable("user", {
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  passwordHash: text("password_hash"),
   role: text("role").default("visitor").notNull(), // 'admin' or 'visitor'
 });
 
@@ -82,7 +81,6 @@ export const artistCategories = pgTable("artist_category", {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(), // e.g., "koncert", "doprovodný program"
-  color: text("color"), // optional hex color for styling
 });
 
 export const artists = pgTable("artist", {

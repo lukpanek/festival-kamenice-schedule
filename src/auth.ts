@@ -4,6 +4,7 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/db";
 import { accounts, sessions, users, verificationTokens } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { hashPassword, verifyPassword } from "@/lib/passwords";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
@@ -16,28 +17,45 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     verificationTokensTable: verificationTokens,
   }),
   providers: [
-    // Přidáno dummy přihlášení pro admina/návštěvníka, aby se s tím dalo hned hrát
     Credentials({
-      name: "Test credentials",
+      name: "Email a heslo",
       credentials: {
         email: { label: "Email", type: "email", placeholder: "admin@kamenice.cz" },
+        password: { label: "Heslo", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email) return null;
-        
+        const email =
+          typeof credentials?.email === "string"
+            ? credentials.email.trim().toLowerCase()
+            : "";
+        const password =
+          typeof credentials?.password === "string"
+            ? credentials.password
+            : "";
+
+        if (!email || !password) return null;
+
         const user = await db.query.users.findFirst({
-          where: eq(users.email, credentials.email as string),
+          where: eq(users.email, email),
         });
 
-        // V reálu tady bude kontrola hesla/OAuth, pro teď dovolíme login emailu,
-        // Pokud neexistuje, tak ho vytvoříme (protože jsme v credentials provideru)
         if (!user) {
-           const newUser = await db.insert(users).values({
-               email: credentials.email as string,
-               name: (credentials.email as string).split("@")[0],
-               role: (credentials.email as string).includes("admin") ? "admin" : "visitor",
-           }).returning();
-           return newUser[0];
+          return null;
+        }
+
+        if (!user.passwordHash) {
+          // Přechodový most pro staré účty, které vznikly ještě bez hesla.
+          const [updatedUser] = await db
+            .update(users)
+            .set({ passwordHash: hashPassword(password) })
+            .where(eq(users.id, user.id))
+            .returning();
+
+          return updatedUser;
+        }
+
+        if (!verifyPassword(password, user.passwordHash)) {
+          return null;
         }
 
         return user;

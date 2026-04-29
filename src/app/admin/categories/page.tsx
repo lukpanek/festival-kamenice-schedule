@@ -34,7 +34,7 @@ export default async function AdminCategoriesPage(
             Kategorie
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Barevné rozlišení typů umělců.
+            Správa typů programu a vystoupení.
           </p>
         </div>
         <div className="flex gap-2 items-center w-full sm:w-auto">
@@ -61,7 +61,6 @@ export default async function AdminCategoriesPage(
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/40 hover:bg-muted/40">
-                <TableHead className="w-12">Barva</TableHead>
                 <TableHead>Název</TableHead>
                 <TableHead className="w-20 text-right">Akce</TableHead>
               </TableRow>
@@ -69,14 +68,6 @@ export default async function AdminCategoriesPage(
             <TableBody>
               {allCategories.map((category) => (
                 <TableRow key={category.id}>
-                  <TableCell className="pr-0">
-                    <div
-                      className="w-5 h-5 border"
-                      style={{
-                        backgroundColor: category.color || "var(--muted)",
-                      }}
-                    />
-                  </TableCell>
                   <TableCell className="font-semibold uppercase text-sm tracking-tight">
                     {category.name}
                   </TableCell>
@@ -120,7 +111,7 @@ export default async function AdminCategoriesPage(
               {allCategories.length === 0 && (
                 <TableRow>
                   <TableCell
-                    colSpan={3}
+                    colSpan={2}
                     className="py-12 text-center text-muted-foreground text-sm"
                   >
                     Žádné kategorie.

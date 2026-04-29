@@ -27,18 +27,18 @@ export const ThemeToggle = () => {
     () => false
   );
 
-  if (!mounted) {
-    return (
-      <Button variant="ghost" size="icon" disabled aria-label="Přepnout téma" />
-    );
-  }
-
-  const Icon = resolvedTheme === "dark" ? Moon : Sun;
+  const activeTheme = mounted ? theme : "system";
+  const Icon = mounted && resolvedTheme === "dark" ? Moon : Sun;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Přepnout téma">
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="Přepnout téma"
+          disabled={!mounted}
+        >
           <Icon data-icon />
         </Button>
       </DropdownMenuTrigger>
@@ -47,7 +47,7 @@ export const ThemeToggle = () => {
           <DropdownMenuItem key={value} onClick={() => setTheme(value)}>
             <OptionIcon data-icon />
             {label}
-            {theme === value && <Check data-icon className="ml-auto" />}
+            {activeTheme === value && <Check data-icon className="ml-auto" />}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

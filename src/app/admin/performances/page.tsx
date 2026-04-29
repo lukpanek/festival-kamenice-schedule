@@ -123,9 +123,6 @@ export default async function AdminPerformancesPage(
                       {category?.name ? (
                         <span
                           className="inline-flex items-center text-xs font-semibold uppercase px-2 py-0.5 border"
-                          style={{
-                            borderColor: category.color || "var(--border)",
-                          }}
                         >
                           {category.name}
                         </span>

@@ -9,20 +9,15 @@ import { AppNav } from "@/components/app-nav";
 import { AuthCard } from "@/components/auth/auth-card";
 
 export const metadata: Metadata = {
-  title: "Účet — KAMEN!CE",
-  description: "Přihlášení a registrace k harmonogramu KAMEN!CE",
+  title: "Vytvořit účet — KAMEN!CE",
+  description: "Registrace k harmonogramu KAMEN!CE",
 };
 
-export default async function LoginPage(props: {
-  searchParams: Promise<{
-    error?: string;
-    callbackUrl?: string;
-    notice?: string;
-  }>;
+export default async function RegisterPage(props: {
+  searchParams: Promise<{ callbackUrl?: string; error?: string; notice?: string }>;
 }) {
   const searchParams = await props.searchParams;
   const session = await auth();
-
   const rawCb = searchParams.callbackUrl;
   const callbackUrl =
     typeof rawCb === "string" &&
@@ -42,7 +37,7 @@ export default async function LoginPage(props: {
 
       <main className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6">
         <AuthCard
-          mode="login"
+          mode="register"
           callbackUrl={callbackUrl}
           error={searchParams.error}
           notice={searchParams.notice}

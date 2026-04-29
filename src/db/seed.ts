@@ -17,9 +17,9 @@ const seed = async () => {
 
   // 1. Categories
   const categoryValues = [
-    { name: "Koncert", color: "#FF3366" },
-    { name: "Doprovodný program", color: "#33CCFF" },
-    { name: "Afterparty", color: "#000000" },
+    { name: "Koncert" },
+    { name: "Doprovodný program" },
+    { name: "Afterparty" },
   ];
   const insertedCategories = await db.insert(artistCategories).values(categoryValues).returning();
   const [koncert, doprovodny, afterparty] = insertedCategories;

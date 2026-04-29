@@ -4,14 +4,32 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Heart, ChevronRight, LayoutGrid, List, CalendarX } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ArtistDialog } from "@/components/artist-dialog";
+import { PerformanceDialog } from "@/components/performance-dialog";
 import { PerformanceCard } from "@/components/performance-card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import type { InferSelectModel } from "drizzle-orm";
+import {
+  artists,
+  artistCategories,
+  performances as performancesTable,
+  stages as stagesTable,
+} from "@/db/schema";
 
 const START_HOUR = 13;
 const END_HOUR = 28;
 const PX_PER_MINUTE = 3;
 const TIMELINE_WIDTH = (END_HOUR - START_HOUR) * 60 * PX_PER_MINUTE;
+
+type Performance = InferSelectModel<typeof performancesTable>;
+type Artist = InferSelectModel<typeof artists>;
+type Stage = InferSelectModel<typeof stagesTable>;
+type Category = InferSelectModel<typeof artistCategories>;
+type ScheduleItem = {
+  performance: Performance;
+  artist: Artist | null;
+  stage: Stage | null;
+  category: Category | null;
+};
 
 function timeToPixels(timeStr: string) {
   let h: number;
@@ -39,8 +57,8 @@ export function ScheduleViews({
   toggleAction,
   showArtistId,
 }: {
-  performances: any[];
-  stages: any[];
+  performances: ScheduleItem[];
+  stages: Stage[];
   selectedDay: string;
   userId?: string;
   userScheduleSet: Set<string>;
@@ -52,7 +70,7 @@ export function ScheduleViews({
     isMobile ? "list" : "timetable",
   );
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [nowPx, setNowPx] = useState<number | null>(null);
+  const [nowPx, setNowPx] = useState<number | null>(() => getNowPixels());
   const hasScrolled = useRef(false);
 
   const updateNow = useCallback(() => {
@@ -60,7 +78,6 @@ export function ScheduleViews({
   }, []);
 
   useEffect(() => {
-    updateNow();
     const interval = setInterval(updateNow, 60_000);
     return () => clearInterval(interval);
   }, [updateNow]);
@@ -109,7 +126,7 @@ export function ScheduleViews({
       >
         {/* View toggle */}
         <div className="border-b bg-background/95 backdrop-blur sticky top-16 z-30">
-          <div className="container flex items-center h-11">
+          <div className="container flex items-center">
             <TabsList variant="line">
               <TabsTrigger value="timetable">
                 <LayoutGrid />
@@ -220,7 +237,7 @@ export function ScheduleViews({
                             className="h-18 border-b relative"
                           >
                             {stagePerformances.map(
-                              ({ performance, artist, category }) => {
+                              ({ performance, artist }) => {
                                 const startPx = timeToPixels(
                                   performance.startTime,
                                 );
@@ -238,7 +255,6 @@ export function ScheduleViews({
                                     startTime={performance.startTime}
                                     endTime={performance.endTime}
                                     artistName={artist?.name}
-                                    categoryColor={category?.color ?? undefined}
                                     startPx={startPx}
                                     widthPx={widthPx}
                                     isAdded={isAdded}
@@ -285,7 +301,7 @@ export function ScheduleViews({
               ) : (
                 <div className="divide-y">
                   {todaysPerformances.map(
-                    ({ performance, artist, stage, category }) => {
+                    ({ performance, artist, stage, category: _category }) => {
                       const isAdded = userScheduleSet.has(performance.id);
                       const stageName =
                         stage?.name ??
@@ -296,13 +312,6 @@ export function ScheduleViews({
                           key={performance.id}
                           className="relative group flex items-stretch"
                         >
-                          <div
-                            className="w-0.5 shrink-0 self-stretch"
-                            style={{
-                              backgroundColor: category?.color || "transparent",
-                            }}
-                          />
-
                           <div className="flex-1 flex items-center gap-3 sm:gap-4 px-4 py-3.5 min-w-0">
                             <div className="shrink-0 text-right w-14">
                               <span className="font-mono text-sm font-semibold text-foreground block leading-tight">
@@ -325,13 +334,13 @@ export function ScheduleViews({
                                     {stageName}
                                   </span>
                                 )}
-                                {category?.name && (
+                                {_category?.name && (
                                   <>
                                     <span className="text-muted-foreground/40 text-xs">
                                       ·
                                     </span>
                                     <span className="text-xs text-muted-foreground/70">
-                                      {category.name}
+                                      {_category.name}
                                     </span>
                                   </>
                                 )}
@@ -386,7 +395,7 @@ export function ScheduleViews({
       </Tabs>
 
       {selectedArtistDetails && (
-        <ArtistDialog
+        <PerformanceDialog
           selectedArtistDetails={selectedArtistDetails}
           selectedDay={selectedDay}
           userId={userId}

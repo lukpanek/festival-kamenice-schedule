@@ -1,16 +1,9 @@
 import { auth } from "@/auth";
 import Link from "next/link";
-import {
-  LogIn,
-  LogOut,
-  Heart,
-  ArrowLeft,
-  ChartNoAxesGantt,
-  Clock,
-} from "lucide-react";
+import { LogIn, Heart, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { signOutAction } from "@/app/actions";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { UserNavMenu } from "@/components/user-nav-menu";
 
 interface AppNavProps {
   showBackLink?: boolean;
@@ -18,6 +11,8 @@ interface AppNavProps {
 
 export async function AppNav({ showBackLink = false }: AppNavProps) {
   const session = await auth();
+  const userLabel =
+    session?.user?.name?.trim() || session?.user?.email || "Účet";
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
@@ -67,13 +62,8 @@ export async function AppNav({ showBackLink = false }: AppNavProps) {
                   </Button>
                 </Link>
               )}
+              <UserNavMenu label={userLabel} email={session.user.email} />
               <ThemeToggle />
-              <form action={signOutAction}>
-                <Button variant="outline">
-                  <LogOut className="w-4 h-4" />
-                  <span className="hidden sm:inline">Odhlásit se</span>
-                </Button>
-              </form>
             </>
           ) : (
             <>
