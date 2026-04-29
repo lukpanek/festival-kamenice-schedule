@@ -40,6 +40,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# nahrané fotky umělců (složka zůstává díky .gitkeep)
+# nahrané fotky umělců
 /public/uploads/artists/*
 !/public/uploads/artists/.gitkeep
+
