@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1776026618475,
-      "tag": "0000_nostalgic_sprite",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1777166400000,
-      "tag": "0001_flat_password_gate",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1777392496678,
-      "tag": "0002_sparkling_madame_web",
+      "when": 1777923492940,
+      "tag": "0000_groovy_sheva_callister",
       "breakpoints": true
     }
   ]

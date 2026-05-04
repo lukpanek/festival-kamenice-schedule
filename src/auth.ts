@@ -63,25 +63,38 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async session({ session, user, token }) {
-      // Protože používáme databázi a možná jwt (pokud credentials), 
-      // tak id a role taháme případně i z db.
+    async session({ session, token }) {
       if (token && session.user) {
-         session.user.id = token.sub as string;
-         session.user.role = token.role as string;
-      } else if (user) {
-         session.user.id = user.id;
-         session.user.role = user.role as string;
+        session.user.id = token.sub as string;
+        session.user.role = token.role as string;
       }
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
+        // Čerstvé přihlášení — nastavíme data z DB objektu
         token.sub = user.id;
         token.role = user.role;
+        return token;
       }
+
+      // Každý další požadavek — ověříme, zda uživatel stále existuje v DB,
+      // a načteme aktuální roli (aby se změna role projevila okamžitě)
+      if (token.sub) {
+        const dbUser = await db.query.users.findFirst({
+          where: eq(users.id, token.sub),
+        });
+
+        if (!dbUser) {
+          // Uživatel byl smazán — zneplatníme token
+          return null;
+        }
+
+        token.role = dbUser.role;
+      }
+
       return token;
-    }
+    },
   },
-  session: { strategy: "jwt" } // Use JWT for simple credentials testing
+  session: { strategy: "jwt" },
 });

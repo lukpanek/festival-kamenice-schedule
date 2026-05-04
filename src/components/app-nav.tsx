@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import Link from "next/link";
-import { LogIn, Heart, ArrowLeft } from "lucide-react";
+import { LogIn, Heart, ArrowLeft, AlignEndVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UserNavMenu } from "@/components/user-nav-menu";
@@ -47,11 +47,18 @@ export async function AppNav({ showBackLink = false }: AppNavProps) {
         <div className="flex items-center gap-1">
           {session ? (
             <>
-              {!showBackLink && (
+              {!showBackLink ? (
                 <Link href="/my-schedule">
                   <Button variant="ghost">
                     <Heart className="size-4 text-red-500 fill-red-500" />
                     <span className="hidden sm:inline">Můj plán</span>
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/">
+                  <Button variant="ghost">
+                    <AlignEndVertical className="size-4" />
+                    <span className="hidden sm:inline">Celý line-up</span>
                   </Button>
                 </Link>
               )}

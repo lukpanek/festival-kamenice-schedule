@@ -15,8 +15,7 @@ CREATE TABLE "account" (
 --> statement-breakpoint
 CREATE TABLE "artist_category" (
 	"id" text PRIMARY KEY NOT NULL,
-	"name" text NOT NULL,
-	"color" text
+	"name" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "artist" (
@@ -68,6 +67,7 @@ CREATE TABLE "user" (
 	"email" text,
 	"emailVerified" timestamp,
 	"image" text,
+	"password_hash" text,
 	"role" text DEFAULT 'visitor' NOT NULL,
 	CONSTRAINT "user_email_unique" UNIQUE("email")
 );

@@ -85,8 +85,8 @@ export default async function MySchedulePage(props: {
 
       <main className="flex-1 flex flex-col w-full overflow-hidden">
         <div className="border-b">
-          <div className="container py-5">
-            <h1 className="font-heading text-4xl sm:text-5xl uppercase mb-4 leading-none">
+          <div className="container pb-5 pt-10">
+            <h1 className="font-heading text-4xl sm:text-6xl uppercase mb-4 leading-none">
               Můj plán
             </h1>
             <DaySelector
