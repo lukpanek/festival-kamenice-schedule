@@ -29,8 +29,11 @@ export async function GET(
 
   let data: Buffer;
   try {
+    console.log(`[Uploads Route] Pokus o čtení souboru: ${abs}`);
     data = await fs.readFile(abs);
-  } catch {
+    console.log(`[Uploads Route] Soubor úspěšně přečten: ${abs}`);
+  } catch (err) {
+    console.error(`[Uploads Route] Chyba při čtení souboru ${abs}:`, err);
     return new NextResponse(null, { status: 404 });
   }
 
