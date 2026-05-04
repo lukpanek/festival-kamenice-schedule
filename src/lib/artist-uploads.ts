@@ -20,7 +20,7 @@ const MIME_TO_EXT: Record<string, string> = {
 };
 
 function artistUploadsDir() {
-  return path.join(process.cwd(), "public", "uploads", "artists");
+  return path.join(process.cwd(), "data", "uploads", "artists");
 }
 
 export function isManagedArtistImageUrl(url: string | null | undefined): boolean {

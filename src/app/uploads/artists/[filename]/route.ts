@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
 
-const UPLOADS_DIR = path.join(process.cwd(), "public", "uploads", "artists");
+const UPLOADS_DIR = path.join(process.cwd(), "data", "uploads", "artists");
 
 const MIME_TYPES: Record<string, string> = {
   jpg: "image/jpeg",
