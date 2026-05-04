@@ -20,10 +20,13 @@ const MIME_TO_EXT: Record<string, string> = {
 };
 
 function artistUploadsDir() {
+  console.log(path.resolve(process.cwd(), "data", "uploads", "artists"));
   return path.join(process.cwd(), "data", "uploads", "artists");
 }
 
-export function isManagedArtistImageUrl(url: string | null | undefined): boolean {
+export function isManagedArtistImageUrl(
+  url: string | null | undefined,
+): boolean {
   if (!url) return false;
   return url.startsWith(`${ARTIST_UPLOAD_PUBLIC_PREFIX}/`);
 }
@@ -62,7 +65,7 @@ export async function saveArtistImageFile(file: File): Promise<string> {
 }
 
 export async function deleteManagedArtistImage(
-  publicUrl: string | null | undefined
+  publicUrl: string | null | undefined,
 ): Promise<void> {
   const abs = publicUrl ? safePublicUrlToAbsoluteFile(publicUrl) : null;
   if (!abs) return;
@@ -81,7 +84,9 @@ export type ArtistUploadListItem = {
   usedBy: { id: string; name: string }[];
 };
 
-export async function listArtistUploadsWithUsage(): Promise<ArtistUploadListItem[]> {
+export async function listArtistUploadsWithUsage(): Promise<
+  ArtistUploadListItem[]
+> {
   const dir = artistUploadsDir();
   let names: string[] = [];
   try {
@@ -125,7 +130,7 @@ export async function listArtistUploadsWithUsage(): Promise<ArtistUploadListItem
 }
 
 export async function removeOrphanArtistUpload(
-  publicPath: string
+  publicPath: string,
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   if (!isManagedArtistImageUrl(publicPath)) {
     return { ok: false, error: "Neplatná cesta." };
@@ -145,7 +150,7 @@ export async function resolveArtistImageFromForm(
   formData: FormData,
   opts:
     | { mode: "create" }
-    | { mode: "update"; previousImageUrl: string | null }
+    | { mode: "update"; previousImageUrl: string | null },
 ): Promise<{ imageUrl: string | null }> {
   const removeRaw = formData.get("removeImage");
   const remove =
