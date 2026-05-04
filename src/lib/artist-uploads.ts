@@ -8,7 +8,7 @@ import { db } from "@/db";
 import { artists } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-export const ARTIST_UPLOAD_PUBLIC_PREFIX = "/uploads/artists";
+export const ARTIST_UPLOAD_PUBLIC_PREFIX = "/uploads/artists"; // servírováno přes /src/app/uploads/artists/[filename]/route.ts
 
 const MAX_BYTES = 5 * 1024 * 1024;
 
