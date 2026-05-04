@@ -11,10 +11,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  MIN_PASSWORD_LENGTH,
   updateUserPasswordAction,
   updateUserRoleAction,
 } from "@/app/admin/users/actions";
+import { MIN_PASSWORD_LENGTH } from "@/lib/passwords";
 
 type UserRow = {
   id: string;

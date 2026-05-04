@@ -101,4 +101,3 @@ export async function updateUserPasswordAction(formData: FormData) {
   redirect(buildUsersRedirect("passwordUpdated"));
 }
 
-export { MIN_PASSWORD_LENGTH };
