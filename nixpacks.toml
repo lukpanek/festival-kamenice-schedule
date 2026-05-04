@@ -1,2 +1,2 @@
 [phases.setup]
-nixPkgs = ["nodejs_23", "nodePackages.pnpm"]
+nixPkgs = ["nodejs_23"]
